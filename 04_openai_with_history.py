@@ -31,5 +31,5 @@ for chunk in responses:
         print(
             chunk.choices[0].delta.content, # delta很好理解，即数学中的增量Δ
             end = '', # end='',代表不换行，末尾什么都没有。python的print默认是要换行的，即末尾end='\n'
-            flush=True # python默认会把所有内容都存在输出缓冲区，无法实现流式输出。flush=True可以避免这种情况，让内容不进入输出缓冲区，直接显示在屏幕上
+            flush=True # end="" 没有换行，输出可能不会立即刷新,而是储存在输出缓冲区里。flush=True 会强制马上写到终端，从而呈现流式效果。
         )
