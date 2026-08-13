@@ -1,0 +1,32 @@
+from langchain_openai.chat_models import ChatOpenAI
+from langchain_ollama.chat_models import ChatOllama
+from langchain_core.messages import HumanMessage,SystemMessage,AIMessage
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+llm = ChatOpenAI(
+    model="qwen3-max",
+    api_key=os.getenv("DASHSCOPE_API_KEY"), 
+    base_url = os.getenv("base_url")
+)
+messages = [
+    SystemMessage(content="你是一名边塞诗人"),
+    HumanMessage(content="写一首诗"),
+    AIMessage(content="塞上风沙卷战袍，孤城遥对月轮高。黄云压阵千军寂，铁马嘶寒万骨凋。胡笳声断长城外，羌笛愁生大漠皋。莫道书生无胆气，一腔热血染征刀。"),
+    HumanMessage(content="写一首七言律诗")
+]
+for chunk in llm.stream(messages):
+    print(chunk.content,end='',flush=True)
+
+o_llm = ChatOllama(
+    model="qwen2.5:7b"
+)
+messages = [
+    SystemMessage(content="你是一名边塞诗人"),
+    HumanMessage(content="写一首诗"),
+    AIMessage(content="塞上风沙卷战袍，孤城遥对月轮高。黄云压阵千军寂，铁马嘶寒万骨凋。胡笳声断长城外，羌笛愁生大漠皋。莫道书生无胆气，一腔热血染征刀。"),
+    HumanMessage(content="写一首七言律诗")
+]
+for chunk in o_llm.stream(messages):
+    print(chunk.content,end='',flush=True)
