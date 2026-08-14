@@ -8,6 +8,6 @@ FewShotPromptTemplate->StringPromptTemplate->BasePromptTemplate
 
 prompt_template = PromptTemplate.from_template("我是{name},我喜欢{hobby}")
 res1 = prompt_template.format(name="熊莉",hobby="睡觉")
-print(res1,type(res1))
+print(res1,type(res1)) # format生成的prompt是str类型的
 res2 = prompt_template.invoke({"name":"熊莉","hobby":"睡觉"})
-print(res2,type(res2))
+print(res2,type(res2)) # invoke生成的prompt是StringPromptValue
