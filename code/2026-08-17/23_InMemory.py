@@ -36,6 +36,7 @@ def get_history(session_id):
         store[session_id] = InMemoryChatMessageHistory()
     return store[session_id]
 
+# 总结：取 session → 找 history → 注入 Prompt → 调模型 → 保存本轮 Human + AI → 下轮再注入。 
 conversation_chain = RunnableWithMessageHistory(
     base_chain, # 被增强的原有chain
     get_history,# 通过会话id获取InMemoryChatMessageHistory类对象
@@ -56,3 +57,59 @@ if __name__ == "__main__":
     res = conversation_chain.invoke(input={"input":"一共有几只狗"},config=session_config)
     print("third try:",res)
 
+# note:如何理解RunnableWithMessageHistory来存储会话记录
+"""
+conversation_chain.invoke()
+          │
+          ▼
+读取 session_id = user_001
+          │
+          ▼
+get_history("user_001")
+          │
+          ▼
+获得 InMemoryChatMessageHistory
+          │
+          ▼
+读取 history.messages
+          │
+          ▼
+放入 chat_history
+          │
+          ▼
+┌────────────────────────────┐
+│ Prompt                     │
+│                            │
+│ System                     │
+│ 历史 Human/AI 消息          │
+│ 历史 Human/AI 消息          │
+│ 当前 Human input            │
+└────────────────────────────┘
+          │
+          ▼
+         LLM
+          │
+          ▼
+      模型生成回答
+          │
+          ▼
+StrOutputParser
+          │
+          ▼
+RunnableWithMessageHistory
+监听到 chain 执行结束
+          │
+          ▼
+HumanMessage(当前输入)
++
+AIMessage(当前输出)
+          │
+          ▼
+history.add_messages(...)
+          │
+          ▼
+保存到 store["user_001"]
+          │
+          ▼
+        返回 res
+"""
