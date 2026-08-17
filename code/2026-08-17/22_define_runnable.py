@@ -13,7 +13,7 @@ second_prompt = PromptTemplate.from_template(
     "{name}请解析这个名字的含义"
 )
 str_parser = StrOutputParser()
-my_func = RunnableLambda(lambda ai_mes:{"name":"ai_mes.content"})
+my_func = RunnableLambda(lambda ai_mes:{"name":ai_mes.content})
 llm = ChatOpenAI(
     model=os.getenv("llm_model"),
     api_key=os.getenv("DASHSCOPE_API_KEY"),
