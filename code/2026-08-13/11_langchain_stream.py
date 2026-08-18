@@ -5,7 +5,7 @@ import os
 
 load_dotenv()
 llm = ChatOpenAI(
-    model="qwen-max",
+    model=os.getenv("llm_model"),
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     base_url=os.getenv("base_url")
 )

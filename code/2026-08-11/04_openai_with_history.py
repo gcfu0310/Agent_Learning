@@ -11,7 +11,6 @@ client = OpenAI(
 
 responses = client.chat.completions.create(
     model="qwen3.7-plus",
-    # 把之前的历史消息都给大模型处理，这种形式显然是不行的，这种历史对话(记忆)，在生产环境中应该放到数据库或是文件当中
     messages = [
         {'role':'system','content':'你是AI助理,回答很简洁'},
         {'role':'user','content':'小明家有两条狗'},
